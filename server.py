@@ -5,7 +5,6 @@ app.secret_key = "secret"
 
 USERS = {"jhacker": "superseekritpw", "utester": "testing123"}
 
-
 @app.route("/")
 def show_index():
     print session
@@ -27,9 +26,13 @@ def verify_credentials():
 
 @app.route("/login", methods=["POST"])
 def login():
+    # This route really shouldn't blindly put the username in the session.
+    # Maybe we would include a token to check from the verify creds route?
     flash("You're logged in!")
+
     username = request.form.get("username")
     session["username"] = username
+
     print session
 
     return redirect("/")

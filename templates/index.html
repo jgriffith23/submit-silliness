@@ -43,6 +43,7 @@ You can log out if you want.
 {% endif %}
 
 <script>
+
     "use strict";
 
     $("#login").on("submit", function (evt) {
@@ -61,6 +62,12 @@ You can log out if you want.
                 // Comment the event listener detatchment line below
                 // for the most successful infinite loop ever!
                 $("#login").off("submit");
+
+                // Of course, if someone could manage to make the line
+                // below work, or otherwise alter the username, we'd be pretty 
+                // screwed.
+                // $("#username").val("jhacker");
+
                 $("#login").submit();
             }
         });
