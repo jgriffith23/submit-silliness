@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+    <title>Form Acrobatics</title>
+    <script src="http://code.jquery.com/jquery.js"></script>
+</head>
+<body>
+
+{% if "username" in session %}
+    You are logged in as: {{ session["username"] }}
+{% else %}
+    Sadness, you are not logged in.
+{% endif %}
+
+<hr>
+
+{% for flash in get_flashed_messages() %}
+  <i>{{ flash }}</i>
+  <br>
+{% endfor %}
+
+
+{% if "username" not in session %}
+<h1>Sign in here!</h1>
+<form action="/login" method="POST" id="login">
+    <label>Username:
+        <input type="text" name="username" id="username" required>
+    </label>
+    <br>
+    <label>Password:
+        <input type="password" name="password" id="password" required>
+    </label>
+    <br><br>
+    <input type="submit" value="Log me in!">
+    <span id="failure-message"></span>
+</form>
+
+{% else %}
+
+You can log out if you want.
+<a href="/logout">Here's a link for that.</a>
+
+{% endif %}
+
+<script>
+    "use strict";
+
+    $("#login").on("submit", function (evt) {
+        evt.preventDefault();
+        var data = {
+            "username": $("#username").val(),
+            "password": $("#password").val()
+        };
+
+        $.post("/verify", data, function (result) {
+            console.log(result);
+            if (result === "failure") {
+                $("#failure-message").html("<i>Something has gone awry...</i>")
+            }
+            else {
+                // Comment the event listener detatchment line below
+                // for the most successful infinite loop ever!
+                $("#login").off("submit");
+                $("#login").submit();
+            }
+        });
+
+    });
+
+    
+</script>
+
+</body>
+
+</html>
